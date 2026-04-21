@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%232d5a27%22/><text y=%2250%%22 x=%2250%%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23a0853a%22>✦</text></svg>">
+
+<meta property="og:title" content="Invitation: 学術交流サロン">
+<meta property="og:description" content="Welcome to Academic Salon. We cordially look forward to your presence.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="学術交流サロン">
+<meta name="twitter:card" content="summary_large_image">
 <title>学術交流サロン 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
@@ -104,33 +111,32 @@ body::after  { right: 0; border-left:  1px solid var(--cream-border); }
   background: linear-gradient(to bottom, transparent, var(--gold));
   margin: 0 auto 1.5rem;
 }
+/* ─── INVITATION TEXT ADJUSTMENT ─── */
 .inv-label {
-  font-family: 'Cormorant Garamond', serif;
-  /* INVITATIONを大きく、優雅な斜体に */
-  font-size: clamp(32px, 8vw, 48px);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  color: var(--gold-light);
-  margin-bottom: 1.2rem;
+  font-family: 'EB Garamond', serif; /* 元のフォントに戻しました */
+  font-size: 16px; /* サイズを控えめに */
+  letter-spacing: 0.35em;
+  color: var(--gold);
   text-transform: uppercase;
-  opacity: 0.9;
+  margin-bottom: 1.5rem;
+  font-style: normal; /* 斜体を解除 */
 }
 .inv-title {
   font-family: 'Noto Serif JP', serif;
-  /* 日本語タイトルはほどよいサイズ感に調整 */
-  font-size: clamp(24px, 6vw, 32px);
+  font-size: clamp(28px, 7vw, 40px); /* INVITATIONより大きく、かつ上品に */
   font-weight: 500;
   color: #f0ece0;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   line-height: 1.4;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 .inv-title-en {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(13px, 3vw, 18px);
-  font-style: italic; color: var(--gold-light);
-  letter-spacing: 0.1em; margin-bottom: 2.5rem;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--gold-light);
+  letter-spacing: 0.12em;
+  margin-bottom: 2rem;
   opacity: 0.85;
 }
 .inv-divider {
@@ -164,54 +170,37 @@ body::after  { right: 0; border-left:  1px solid var(--cream-border); }
 }
 
 .btn-enter {
-  background: none;
-  border: 1px solid rgba(212, 184, 112, 0.4); /* 薄いゴールドの枠 */
+  background: transparent;
+  border: 1px solid var(--gold);
   color: var(--gold-light);
-  padding: 14px 60px;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 19px;
+  padding: 16px 54px;
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   cursor: pointer;
   position: relative;
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-top: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 2rem;
 }
-
-/* ボタンの四隅に小さな装飾を追加 */
-.btn-enter::before, .btn-enter::after {
+/* 外側の細い二重フレーム */
+.btn-enter::before {
   content: '';
   position: absolute;
-  width: 8px; height: 8px;
-  border-color: var(--gold);
-  border-style: solid;
+  top: -5px; left: -5px; right: -5px; bottom: -5px;
+  border: 1px solid rgba(160, 133, 58, 0.3);
+  pointer-events: none;
   transition: all 0.4s;
-  opacity: 0.6;
 }
-.btn-enter::before {
-  top: -1px; left: -1px; border-width: 1px 0 0 1px;
-}
-.btn-enter::after {
-  bottom: -1px; right: -1px; border-width: 0 1px 1px 0;
-}
-
-.btn-enter span {
-  position: relative;
-  z-index: 2;
-}
+.btn-enter span { position: relative; z-index: 2; }
 
 .btn-enter:hover {
-  color: var(--green-dark);
-  letter-spacing: 0.35em; /* 文字間が広がる演出 */
-  border-color: var(--gold);
-}
-
-/* ホバー時に背景が満ちる演出 */
-.btn-enter:hover::before, .btn-enter:hover::after {
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
-  opacity: 1;
   background: var(--gold);
+  color: var(--green-dark);
+}
+.btn-enter:hover::before {
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-color: var(--gold);
 }
 
 .inv-bottom-rule {
@@ -477,6 +466,9 @@ footer {
     <div class="inv-title">学術交流サロン</div>
     <div class="inv-title-en">Academic Salon</div>
     <div class="inv-divider"><span></span><i>✦</i><span></span></div>
+    <div style="font-family:'Cormorant Garamond', serif; font-size:14px; color:#b8c8b4; font-style:italic; margin-top:-1rem; margin-bottom:2rem; letter-spacing:0.04em;">
+      Welcome to Academic Salon. We cordially look forward to your presence.
+    </div>
     <div class="inv-meta">
       <div class="inv-meta-item">
         <span class="inv-meta-label">Date</span>
