@@ -79,15 +79,21 @@ body::after  { right: 0; border-left:  1px solid var(--cream-border); }
 
 /* ─── INVITATION SCREEN ─── */
 #invitation {
-  min-height: 100vh;
+  min-height: 100svh; /* 100vhから100svhに変更（スマホのUI被り防止） */
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   text-align: center;
-  padding: 3rem 2rem;
+  padding: 3rem 2rem 6rem; /* 下の余白を少し増やしました */
   background: var(--green-dark);
   position: relative; overflow: hidden;
   transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
 }
+
+/* （※古いブラウザ用の予備として、すぐ下に以下を追記） */
+@supports not (min-height: 100svh) {
+  #invitation { min-height: 100vh; }
+}
+
 #invitation.exiting {
   opacity: 0; filter: blur(12px); transform: scale(1.04);
   pointer-events: none;
@@ -291,6 +297,7 @@ body::after  { right: 0; border-left:  1px solid var(--cream-border); }
 .prog-bar.keynote{ background: var(--gold); }
 .prog-bar.talk   { background: var(--green-mid); }
 .prog-bar.break  { background: var(--cream-dark); }
+.prog-bar.none   { background: transparent; }
 
 .prog-body { padding: 2px 0; }
 .prog-type-tag {
@@ -312,21 +319,20 @@ body::after  { right: 0; border-left:  1px solid var(--cream-border); }
 }
 
 /* ─── ACCESS ─── */
-.map-area {
-  border: 1px solid var(--cream-border);
-  background: var(--green-light);
-  height: 190px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  cursor: pointer; gap: 7px;
+.map-embed {
+  width: 100%;
+  height: 240px;
   margin-bottom: 1.25rem;
-  transition: background 0.2s;
+  border: 1px solid var(--cream-border);
+  background: var(--cream-dark);
+  overflow: hidden;
 }
-.map-area:hover { background: #d0e0cc; }
-.map-area-label {
-  font-family: 'EB Garamond', serif;
-  font-size: 14px; color: var(--green-dark);
-  letter-spacing: 0.1em;
+.map-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* サイトのトンマナに合わせた色味調整フィルター */
+  filter: grayscale(85%) sepia(30%) hue-rotate(60deg) contrast(95%);
 }
 .map-area-icon { font-size: 28px; }
 
@@ -498,13 +504,11 @@ footer {
         <div class="sec-en">Access</div>
         <div class="sec-rule"></div>
       </div>
-      <div class="map-area" onclick="openLink('https://maps.app.goo.gl/J5mN9EdLjbpPjiPJ7')">
-        <div class="map-area-icon">🗺</div>
-        <div class="map-area-label">Google Maps で開く ↗</div>
+      <div class="map-embed">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3262.085931726991!2d136.9651036!3d35.15447760000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60037b0056b8a65d%3A0xbd13a3d21eca72ad!2z5p2x5rW35Zu956uL5aSn5a2m5qmf5qeLIENvbW1vbiBOZXh1c--8iENvbW9OZe-8iQ!5e0!3m2!1sja!2sjp!4v1776790605521!5m2!1sja!2sjp" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
-      <div class="venue-name">Common Nexus LOUNGE 1</div>
+      <div class="venue-name">東海国立大学機構Common Nexus LOUNGE 1</div>
       <div class="venue-addr">
-        東海国立大学機構<br>
         〒464-8601 愛知県名古屋市千種区不老町 Common Nexus
       </div>
       <a class="access-link" href="https://maps.app.goo.gl/J5mN9EdLjbpPjiPJ7" target="_blank" rel="noopener">
@@ -513,7 +517,7 @@ footer {
       <div class="transport-section">
         <div class="transport-label">交通アクセス</div>
         <div class="transport-item">
-          名古屋市営地下鉄名城線「名古屋大学駅」直結（1番出口方面）
+          市営地下鉄名城線「名古屋大学駅」直結（1番出口方面）
         </div>
       </div>
     </section>
@@ -528,7 +532,7 @@ footer {
         <span><span class="ldot" style="background:var(--green-dark)"></span>式典</span>
         <span><span class="ldot" style="background:var(--gold)"></span>基調トーク</span>
         <span><span class="ldot" style="background:var(--green-mid)"></span>講演</span>
-        <span><span class="ldot" style="background:var(--cream-dark)"></span>休憩</span>
+        <span><span class="ldot" style="background:var(--cream-dark)"></span>交流</span>
       </div>
       <div id="progList"></div>
     </section>
@@ -544,7 +548,7 @@ footer {
 
 <script>
 const programData = [
-  { time:'10:30', type:'party',   title:'開場' },
+  { time:'10:30', type:'none',    title:'開場' }, // typeをnoneに
   { time:'11:00', type:'event',   title:'オープニング' },
   { time:'11:10', type:'keynote', title:'オープニングトーク：「組合せゲーム大会」', speaker:'小松優治（名古屋大学情報学研究科 D3）' },
   { time:'11:50', type:'break',   title:'休憩' },
@@ -560,19 +564,23 @@ const programData = [
   { time:'16:20', type:'break',   title:'休憩' },
   { time:'16:40', type:'keynote', title:'クロージングトーク：「学問の行き着く先について」', speaker:'中島光一朗（筑波大学計算科学研究センター 博士研究員）' },
   { time:'17:10', type:'event',   title:'クロージング' },
-  { time:'17:20', type:'party',   title:'自由交流' },
-  { time:'18:00', type:'event',   title:'終了' },
+  { time:'17:20', type:'break',   title:'自由交流' }, // typeをbreakに変更
+  { time:'18:00', type:'none',    title:'終了' },    // typeをnoneに
 ];
-const typeLabel = { party:'交流', talk:'講演', keynote:'基調トーク', break:'休憩', event:'式典' };
+
+// breakの表示名を「交流」に変更
+const typeLabel = { talk:'講演', keynote:'基調トーク', break:'交流', event:'式典' }; 
 const list = document.getElementById('progList');
+
 programData.forEach(d => {
   const el = document.createElement('div');
   el.className = 'prog-item';
+  // typeが'none'以外の場合のみタグを表示するよう三項演算子を追加
   el.innerHTML = `
     <div class="prog-time">${d.time}</div>
     <div class="prog-bar ${d.type}"></div>
     <div class="prog-body">
-      <div class="prog-type-tag ${d.type}">${typeLabel[d.type]}</div>
+      ${d.type !== 'none' ? `<div class="prog-type-tag ${d.type}">${typeLabel[d.type]}</div>` : ''}
       <div class="prog-title-t">${d.title}</div>
       ${d.speaker ? `<div class="prog-spk">${d.speaker}</div>` : ''}
     </div>`;
