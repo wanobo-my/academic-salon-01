@@ -123,12 +123,15 @@ body::after  { right: 0; border-left:  1px solid var(--cream-border); }
 }
 .inv-title {
   font-family: 'Noto Serif JP', serif;
-  font-size: clamp(28px, 7vw, 40px); /* INVITATIONより大きく、かつ上品に */
+  /* サイズを少し抑え、字間を広くして品格を出します */
+  font-size: clamp(20px, 5vw, 26px); 
   font-weight: 500;
   color: #f0ece0;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.35em; /* 字間を広めに設定 */
   line-height: 1.4;
   margin-bottom: 0.8rem;
+  /* 最後の文字の右側の余白を打ち消して中央寄せを維持 */
+  margin-right: -0.35em; 
 }
 .inv-title-en {
   font-family: 'Cormorant Garamond', serif;
@@ -413,8 +416,25 @@ body::after  { right: 0; border-left:  1px solid var(--cream-border); }
 /* FOOTER */
 footer {
   text-align: center;
-  padding: 2rem 1.5rem 3rem;
+  padding: 3rem 1.5rem 4rem; /* 下の余白を少し増やす */
   background: var(--green-dark);
+}
+.footer-team {
+  margin-top: 1.5rem;
+  color: #e8e0d0;
+}
+.footer-team-title {
+  font-family: 'EB Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.footer-member {
+  font-size: 13px;
+  line-height: 2;
+  color: #b8c8b4;
 }
 .footer-logo {
   font-family: 'Cormorant Garamond', serif;
@@ -463,7 +483,7 @@ footer {
   <div id="invitation">
     <div class="inv-top-rule"></div>
     <div class="inv-label">Invitation</div>
-    <div class="inv-title">学術交流サロン</div>
+    <div class="inv-title">学術交流サロン 招待状</div>
     <div class="inv-title-en">Academic Salon</div>
     <div class="inv-divider"><span></span><i>✦</i><span></span></div>
     <div style="font-family:'Cormorant Garamond', serif; font-size:14px; color:#b8c8b4; font-style:italic; margin-top:-1rem; margin-bottom:2rem; letter-spacing:0.04em;">
@@ -537,7 +557,7 @@ footer {
         <div class="info-key">Fee</div>
         <div class="info-val">
           参加費無料
-          <div class="info-sub">事前登録不要。当日お気軽にお越しください。</div>
+          <div class="info-sub">本招待状をお持ちの方は事前登録なしでそのままご入場いただけます。</div>
         </div>
       </div>
     </section>
@@ -582,10 +602,21 @@ footer {
     </section>
 
     <footer>
-      <div class="footer-logo">学術交流サロン 2026</div>
-      <div class="footer-rule"></div>
-      <div class="footer-sub">学術交流サロン企画チーム</div>
-    </footer>
+  <div class="footer-logo">学術交流サロン 2026</div>
+  <div class="footer-rule"></div>
+  
+  <div class="footer-team">
+    <div class="footer-team-title">Organizing Committee</div>
+    <div class="footer-member">
+      井上 裕介（名古屋大学情報学研究科 助教）<br>
+      中島 光一朗（筑波大学計算科学研究センター 博士研究員）<br>
+      小松 優治（名古屋大学情報学研究科 D3）<br>
+      森田 湧登（FabCafe Nagoyaディレクター）
+    </div>
+  </div>
+  
+  <div class="footer-sub" style="margin-top: 2rem;">学術交流サロン企画チーム</div>
+</footer>
   </div>
 
 </div>
@@ -631,7 +662,11 @@ programData.forEach(d => {
   list.appendChild(el);
 });
 
+// 入場処理
 function enterSite() {
+  // セッションに入場済みフラグを保存
+  sessionStorage.setItem('hasEntered', 'true');
+  
   const inv = document.getElementById('invitation');
   const main = document.getElementById('main');
   inv.classList.add('exiting');
@@ -644,6 +679,22 @@ function enterSite() {
     });
   }, 750);
 }
+
+// ページ読み込み時のチェック処理
+window.addEventListener('DOMContentLoaded', () => {
+  // すでに入場済みの場合
+  if (sessionStorage.getItem('hasEntered') === 'true') {
+    const inv = document.getElementById('invitation');
+    const main = document.getElementById('main');
+    
+    // アニメーションなしで即座にメインを表示
+    inv.style.display = 'none';
+    main.style.display = 'block';
+    main.classList.add('visible', 'revealed');
+    
+    // スムーズなスクロール位置の復元などのために微調整が必要な場合はここに追記
+  }
+});
 
 function addToCalendar() {
   const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
